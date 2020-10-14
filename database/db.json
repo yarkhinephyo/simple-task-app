@@ -1,13 +1,14 @@
 {
-    "tasks": [
-        {
-            "id": 0,
-            "name": "Eat food"
-        },
-        {
-            "id": 1,
-            "name": "Drink juice"
-        }
-    ]
+  "tasks": [
+    {
+      "id": 0,
+      "name": "Buy bread for mum",
+      "done": false
+    },
+    {
+      "id": 1,
+      "name": "Hand in assignment 1",
+      "done": false
+    }
+  ]
 }
-    
