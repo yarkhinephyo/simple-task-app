@@ -1,48 +1,79 @@
 <template>
   <b-card class="my-2">
-    <b-container fluid>
-      <!-- If it is not expanded and there is a valid task name -->
-      <b-row v-if="taskData.name && !expanded">
-        <!-- Task Details -->
-        <b-col sm="9">
-          {{ taskData }}
-        </b-col>
+    <!-- If it is not expanded and there is a valid task name -->
+    <b-row v-if="taskData.name && !expanded">
+      <!-- Task Details -->
+      <b-col xs="9">
+        <span v-if="!taskData.done">
+          {{ taskData.name }}
+        </span>
+        <span v-else>
+          <del>{{ taskData.name }}</del>
+        </span>
+      </b-col>
 
-        <!-- User Options -->
-        <b-col sm="3">
-          <a class="mx-1" href="#" @click="expanded = true">
-            <b-icon-pencil-fill variant="primary"></b-icon-pencil-fill>
-          </a>
-          <a class="mx-1" href="#"
-            ><b-icon-check2 variant="success"> </b-icon-check2>
-          </a>
-          <a class="mx-1" href="#" @click="deleteTask(taskData.id)">
-            <b-icon-trash-fill variant="danger"></b-icon-trash-fill>
-          </a>
-        </b-col>
-      </b-row>
+      <!-- User Options, varies based on whether task is done or not -->
+      <b-col xs="3" class="d-none d-md-block">
+        <a class="mx-1" href="#" @click="toggleDone">
+          <b-icon-check2 variant="success" v-if="!taskData.done">
+          </b-icon-check2>
+          <b-icon-check2-all variant="success" v-else> </b-icon-check2-all>
+        </a>
+        <a class="mx-1" href="#" @click="expanded = true" v-if="!taskData.done">
+          <b-icon-pencil-fill variant="primary"></b-icon-pencil-fill>
+        </a>
+        <a class="mx-1" href="#" @click="deleteTask(taskData.id)">
+          <b-icon-trash-fill variant="danger"></b-icon-trash-fill>
+        </a>
+      </b-col>
 
-      <!-- If it is expanded or has data -->
-      <b-row class="justify-content-center" v-else>
-        <b-col sm="10">
-          <b-form-input
-            v-model="taskname"
-            type="text"
-            placeholder="I have to..."
-          ></b-form-input>
-        </b-col>
-        <b-col sm="2">
-          <b-button
-            class="mx-1"
-            size="sm"
-            variant="outline-secondary"
-            @click="handleUpdate"
-          >
-            <b-icon-journal-plus variant="secondary"></b-icon-journal-plus>
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-container>
+      <!-- User Options, for smaller size devices -->
+      <b-col xs="3" class="d-xs-block d-md-none">
+        <b-dropdown
+          variant="link"
+          toggle-class="text-decoration-none"
+          no-caret
+          dropleft
+        >
+          <template v-slot:button-content>
+            <b-icon-three-dots variant="secondary"></b-icon-three-dots>
+          </template>
+
+          <b-dropdown-item @click="toggleDone">
+            <span v-if="!taskData.done">Mark Done</span>
+            <span v-else>Mark Undone</span>
+          </b-dropdown-item>
+          <b-dropdown-item @click="expanded = true" v-if="!taskData.done">
+            Edit
+          </b-dropdown-item>
+          <b-dropdown-item @click="deleteTask(taskData.id)">
+            Delete
+          </b-dropdown-item>
+        </b-dropdown>
+      </b-col>
+    </b-row>
+
+    <!-- If it is expanded or has data -->
+    <b-row class="justify-content-center" v-else>
+      <b-col md="9" lg="10">
+        <b-form-input
+          v-model="taskname"
+          type="text"
+          :placeholder="placeholder"
+        ></b-form-input>
+      </b-col>
+      <b-col md="3" lg="2">
+        <b-button
+          class="my-1"
+          size="sm"
+          variant="outline-secondary"
+          @click="handleUpdate"
+          block
+        >
+          Done
+        </b-button>
+      </b-col>
+    </b-row>
   </b-card>
 </template>
 
@@ -55,6 +86,7 @@ export default {
     return {
       expanded: false,
       taskname: "",
+      placeholder: "I have to...",
     };
   },
   created() {
@@ -62,28 +94,32 @@ export default {
       this.taskname = this.taskData.name;
     }
   },
-  props: [
-    'taskData'
-  ],
+  props: ["taskData"],
   methods: {
     ...mapActions({
       deleteTask: "tasks/deleteTask",
-      updateTask: "tasks/updateTask"
+      updateTask: "tasks/updateTask",
     }),
-    handleUpdate(){
-      this.expanded = false
-      
+    toggleDone() {
+      this.updateTask({
+        ...this.taskData,
+        done: !this.taskData.done,
+      });
+    },
+    handleUpdate() {
+      this.expanded = false;
+
       // Do nothing if no input by user
-      if(this.taskname === ""){
-        return
+      if (this.taskname === "") {
+        this.placeholder = "Please write a task first...";
+        return;
       }
 
       this.updateTask({
-        id: this.taskData.id,
+        ...this.taskData,
         name: this.taskname,
-        done: false
-      })
-    }
+      });
+    },
   },
 };
 </script>

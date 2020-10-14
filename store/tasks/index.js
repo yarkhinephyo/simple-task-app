@@ -72,7 +72,9 @@ const actions = {
       // Limit empty task that can be added to 1
       if (state.tasks.length == 0 || state.tasks[state.tasks.length - 1].name){
         commit('ADDTASKS', task)
+        return true
       }
+      return false
     } catch (e) {
       console.log(e);
     }
