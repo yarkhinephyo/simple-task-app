@@ -1,3 +1,3 @@
-const jsonServer = "http://localhost:3000"
+const serverIP = "http://localhost:3000"
 
-export { jsonServer };
+export { serverIP };
