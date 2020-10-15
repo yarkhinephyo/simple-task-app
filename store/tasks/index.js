@@ -33,7 +33,7 @@ const actions = {
     try{
       const res = await axios.get(`${serverIP}/tasks`)
       console.log(res.data);
-      commit('SETTASKS', res.data)
+      commit('SETTASKS', res.data.tasks)
     } catch (e) {
       console.log(e);
     }
@@ -41,7 +41,7 @@ const actions = {
 
   async deleteTask({ commit }, taskID){
     try{
-      await axios.delete(`${serverIP}/tasks/${taskID}`)
+      axios.delete(`${serverIP}/tasks/${taskID}`)
       commit('DELETETASKS', taskID)
     } catch (e) {
       console.log(e);
@@ -50,17 +50,17 @@ const actions = {
 
   async updateTask({ commit }, taskToUpdate){
     try{
-      const res = await axios.get(`${serverIP}/tasks`)
-      const tasks = res.data
+      commit('UPDATETASK', taskToUpdate) // Change state first
+
+      const res = await axios.get(`${serverIP}/tasks`) // Check if exists in DB
+      const tasks = res.data.tasks
       
-      // If the DB already has, update it. If not, add it
+      // If exists in DB, update the value. If not, add the task
       if(tasks.filter(task => task.id === taskToUpdate.id).length > 0){
         await axios.put(`${serverIP}/tasks/${taskToUpdate.id}`, taskToUpdate)
       } else {
         await axios.post(`${serverIP}/tasks`, taskToUpdate)
       }
-      commit('UPDATETASK', taskToUpdate)
-      
     } catch (e) {
       console.log(e);
     }

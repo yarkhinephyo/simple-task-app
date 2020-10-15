@@ -60,6 +60,7 @@
           v-model="taskname"
           type="text"
           :placeholder="placeholder"
+          @keyup.enter="handleUpdate"
         ></b-form-input>
       </b-col>
       <b-col md="3" lg="2">

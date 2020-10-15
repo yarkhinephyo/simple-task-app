@@ -1,3 +1,3 @@
-const serverIP = "http://localhost:3000"
+const serverIP = "https://vue-task-app-d3674.firebaseapp.com/api"
 
 export { serverIP };

@@ -1,19 +1,19 @@
 {
-  "tasks": [
+  "posts": [
     {
-      "id": 1602684247931,
-      "name": "I need to cook dinner",
-      "done": false
-    },
-    {
-      "id": 1602685448576,
-      "name": "Buy some vegetables",
-      "done": false
-    },
-    {
-      "id": 1602691155636,
-      "name": "Order bubble tea",
-      "done": false
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
     }
-  ]
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
 }
