@@ -1,24 +1,14 @@
-# simple-task-app
+# Simple-task-app
 
-## Project setup
+Single page application with VueJS
+
+## Running development server
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Deployment
+Vue app on [Netlify server](https://gallant-mclean-ad0cfb.netlify.app/#).
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+JSON server on [Firebase function](https://vue-task-app-d3674.firebaseapp.com/api/) thanks to [firebase-json-server](https://github.com/narze/firebase-json-server).
