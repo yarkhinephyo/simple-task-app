@@ -4,7 +4,7 @@
 
       <!-- Display Task lists -->
       <b-row class="justify-content-center">
-        <b-col xs="12" sm="10" md="8">
+        <b-col sm="10" md="8">
           <TaskCard v-for="task in tasks" :taskData="task" :key="task.id" />
         </b-col>
       </b-row>
@@ -37,11 +37,13 @@ export default {
     TaskCard,
   },
   computed: {
+    // Get all the tasks from vuex
     ...mapGetters({
       tasks: "tasks/getTasks",
     }),
   },
   created() {
+    // Update vuex of all tasks from json-server
     this.retrieveLatestTasks();
   },
   methods: {
@@ -49,6 +51,7 @@ export default {
       retrieveLatestTasks: "tasks/retrieveLatestTasks",
       addEmptyTask: "tasks/addEmptyTask",
     }),
+    // Add empty task to vuex
     addTaskCard() {
       this.addEmptyTask({ id: Date.now(), name: "", done: false });
     },

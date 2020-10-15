@@ -1,9 +1,10 @@
 <template>
   <b-card class="my-2">
-    <!-- If it is not expanded and there is a valid task name -->
+    <!-- If there is a valid task name and the user does not want to edit -->
     <b-row v-if="taskData.name && !expanded">
+      
       <!-- Task Details -->
-      <b-col xs="9">
+      <b-col cols="10" md="8">
         <span v-if="!taskData.done">
           {{ taskData.name }}
         </span>
@@ -12,23 +13,40 @@
         </span>
       </b-col>
 
-      <!-- User Options, varies based on whether task is done or not -->
-      <b-col xs="3" class="d-none d-md-block">
+      <!-- User Options for wider devices, varies based on whether task is done or not -->
+      <b-col md="4" class="d-none d-md-block">
+        <!-- Check done task and undone task -->
         <a class="mx-1" href="#" @click="toggleDone">
-          <b-icon-check2 variant="success" v-if="!taskData.done">
+          <b-icon-check2
+            variant="success"
+            width="20"
+            height="20"
+            v-if="!taskData.done"
+          >
           </b-icon-check2>
-          <b-icon-check2-all variant="success" v-else> </b-icon-check2-all>
+          <b-icon-check2-all variant="success" width="20" height="20" v-else>
+          </b-icon-check2-all>
         </a>
+        <!-- Edit task name -->
         <a class="mx-1" href="#" @click="expanded = true" v-if="!taskData.done">
-          <b-icon-pencil-fill variant="primary"></b-icon-pencil-fill>
+          <b-icon-pencil-fill
+            variant="primary"
+            width="20"
+            height="20"
+          ></b-icon-pencil-fill>
         </a>
+        <!-- Delete task -->
         <a class="mx-1" href="#" @click="deleteTask(taskData.id)">
-          <b-icon-trash-fill variant="danger"></b-icon-trash-fill>
+          <b-icon-trash-fill
+            variant="danger"
+            width="20"
+            height="20"
+          ></b-icon-trash-fill>
         </a>
       </b-col>
 
       <!-- User Options, for smaller size devices -->
-      <b-col xs="3" class="d-xs-block d-md-none">
+      <b-col cols="2" class="d-xs-block d-md-none">
         <b-dropdown
           variant="link"
           toggle-class="text-decoration-none"
@@ -39,13 +57,16 @@
             <b-icon-three-dots variant="secondary"></b-icon-three-dots>
           </template>
 
+          <!-- Check done task and undone task -->
           <b-dropdown-item @click="toggleDone">
             <span v-if="!taskData.done">Mark Done</span>
             <span v-else>Mark Undone</span>
           </b-dropdown-item>
+          <!-- Edit task name -->
           <b-dropdown-item @click="expanded = true" v-if="!taskData.done">
             Edit
           </b-dropdown-item>
+          <!-- Delete task -->
           <b-dropdown-item @click="deleteTask(taskData.id)">
             Delete
           </b-dropdown-item>
@@ -53,7 +74,7 @@
       </b-col>
     </b-row>
 
-    <!-- If it is expanded or has data -->
+    <!-- If the user wants to edit or there is no task name -->
     <b-row class="justify-content-center" v-else>
       <b-col md="9" lg="10">
         <b-form-input
@@ -84,6 +105,7 @@ import { mapActions } from "vuex";
 export default {
   name: "TaskCard",
   data() {
+    // If it is 'expanded', user can edit the task
     return {
       expanded: false,
       taskname: "",
@@ -91,10 +113,12 @@ export default {
     };
   },
   created() {
+    // taskname is v-model of input
     if (this.taskData.name) {
       this.taskname = this.taskData.name;
     }
   },
+  // Details about the task are passed from parent
   props: ["taskData"],
   methods: {
     ...mapActions({
@@ -102,6 +126,7 @@ export default {
       updateTask: "tasks/updateTask",
     }),
     toggleDone() {
+      // Update the done state of task and send http request
       this.updateTask({
         ...this.taskData,
         done: !this.taskData.done,
@@ -115,7 +140,7 @@ export default {
         this.placeholder = "Please write a task first...";
         return;
       }
-
+      // Update the name state of task and send http request
       this.updateTask({
         ...this.taskData,
         name: this.taskname,
